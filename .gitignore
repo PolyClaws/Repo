@@ -1,6 +1,9 @@
 # Vercel
 .vercel
 
+# Claude Code
+.claude/
+
 # Environment
 .env.local
 .env*.local
