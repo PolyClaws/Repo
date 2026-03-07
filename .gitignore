@@ -1,15 +1,9 @@
 # Vercel
 .vercel
 
-# Claude Code
-.claude/
-
 # Environment
 .env.local
 .env*.local
-
-# Agent state
-agent-runner/positions.json
 
 # Dependencies
 node_modules/
