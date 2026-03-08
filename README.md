@@ -23,18 +23,18 @@ An on-chain agent loop runs continuously, claiming protocol fees, evaluating mar
 pump.fun creator fees
         │
         ▼
-  FAUCET (claims SOL)
+  POLYCLAW claims treasury SOL
         │
         ▼
-  STONECLAW (allocates capital)
-   ├── IRONCLAW  → buybacks + whale detection
-   ├── STORMCLAW → concentrated raid buys
-   └── EMBERCLAW → buy + burn
+  Capital allocated across operations:
+   ├── Buybacks
+   ├── Concentrated buys
+   └── Buy + burn
         │
         ▼
-  HUNTCLAW (scans Polymarket)
+  Polymarket market scan (quant edge model)
    └── Kelly/EV/efficiency scoring
-       └── positions.json → RESOLVER
+       └── Positions tracked → resolved
               │
               ▼
        deBridge DLN (Polygon USDC → SOL)
@@ -53,23 +53,7 @@ pump.fun creator fees
 | Chain | Solana / pump.fun / pumpswap-sdk |
 | Markets | Polymarket CLOB (Polygon) |
 | Bridge | deBridge DLN |
-| Inference | Claude (via Anthropic API) |
 | Hosting | Vercel |
-
----
-
-## Agents
-
-| Agent | Role |
-|-------|------|
-| FAUCET | Claims pump.fun creator fees |
-| STONECLAW | Capital allocation decisions |
-| IRONCLAW | Buybacks, whale detection |
-| STORMCLAW | Concentrated raid buys |
-| EMBERCLAW | Buy + burn execution |
-| HUNTCLAW | Polymarket edge scanner (quant) |
-| RESOLVER | Position resolution + profit routing |
-| TIDECLAW | LP management (standby) |
 
 ---
 
@@ -84,7 +68,7 @@ Every bet won reduces supply. Every profit is permanent deflation.
 
 ---
 
-## Edge Model (HUNTCLAW)
+## Edge Model
 
 Markets are scored by three criteria before any bet is placed:
 
@@ -103,12 +87,6 @@ Thresholds: `EV ≥ 4%` · `Kelly ≥ 2%` · `Edge score ≥ 7%` · `Liquidity $
 ```
 polyclaw/
 ├── agent-runner/          # Agent loop (TypeScript)
-│   ├── agents/            # Individual agent modules
-│   ├── decisions.ts       # Claude inference layer
-│   ├── edge.ts            # Pure quant engine
-│   ├── bridge.ts          # deBridge cross-chain
-│   ├── positions.ts       # Bet persistence
-│   └── index.ts           # Main loop
 ├── pages/                 # Next.js pages
 │   ├── index.js           # Landing page
 │   ├── app.js             # Agent dashboard

@@ -7,7 +7,7 @@ How to deploy POLYCLAW in production.
 ## Prerequisites
 
 - Node.js 18+
-- A funded Solana wallet (agent wallet, not treasury)
+- A funded Solana wallet (agent wallet)
 - A funded Polygon wallet for Polymarket bets
 - Vercel account (or any Node.js host)
 - Anthropic API key
