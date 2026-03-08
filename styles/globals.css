@@ -194,6 +194,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 60px;height:72px;
 .cta-subtitle{font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--gold);letter-spacing:2px;margin:24px 0 20px;text-shadow:0 0 20px rgba(212,175,55,.3);position:relative;z-index:1;}
 .cta-body{font-family:'Playfair Display',serif;font-size:15px;color:var(--dim);max-width:500px;line-height:1.9;margin:0 auto 52px;position:relative;z-index:1;}
 .cta-btns{display:flex;gap:20px;justify-content:center;position:relative;z-index:1;}
+.ca-bar{display:flex;align-items:center;gap:12px;margin-top:24px;justify-content:center;position:relative;z-index:1;}
+.ca-label{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);border:1px solid rgba(212,175,55,.3);padding:4px 10px;}
+.ca-val{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;color:rgba(245,240,232,.5);}
 
 footer{background:var(--black);border-top:1px solid rgba(212,175,55,.12);padding:48px 60px;display:flex;justify-content:space-between;align-items:center;}
 .footer-logo{font-family:'Cinzel Decorative',serif;font-size:18px;letter-spacing:4px;color:var(--gold);}

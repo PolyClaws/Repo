@@ -10,14 +10,10 @@ const CATEGORIES = [
     suit: '♠',
     suitColor: 'var(--crimson)',
     tag: 'ROULETTE FLOOR',
-    winRate: 71,
-    exposure: 18400,
-    openPositions: 7,
     pill: 'HIGH CONVICTION',
     pillColor: 'var(--neon-g)',
     pillBorder: 'rgba(0,255,136,.3)',
     glow: 'rgba(200,16,46,.12)',
-    markets: ['US Senate runoff — GA','EU Parliament resolution','UK PM confidence vote'],
   },
   {
     id: 'crypto',
@@ -26,14 +22,10 @@ const CATEGORIES = [
     suit: '♦',
     suitColor: 'var(--gold)',
     tag: 'SLOT FLOOR',
-    winRate: 68,
-    exposure: 31200,
-    openPositions: 12,
     pill: 'MAX EXPOSURE',
     pillColor: 'var(--gold)',
     pillBorder: 'rgba(212,175,55,.4)',
     glow: 'rgba(212,175,55,.1)',
-    markets: ['BTC above $95k by April','ETH/BTC ratio > 0.06','SOL top-3 by market cap'],
   },
   {
     id: 'finance',
@@ -42,14 +34,10 @@ const CATEGORIES = [
     suit: '♣',
     suitColor: 'var(--ivory)',
     tag: 'BLACKJACK TABLES',
-    winRate: 74,
-    exposure: 22100,
-    openPositions: 5,
     pill: 'STEADY EDGE',
     pillColor: 'var(--neon-b)',
     pillBorder: 'rgba(0,207,255,.3)',
     glow: 'rgba(0,207,255,.06)',
-    markets: ['Fed rate cut Q2 2025','S&P 500 above 5800 EOY','CPI below 3% by June'],
   },
   {
     id: 'world',
@@ -58,14 +46,10 @@ const CATEGORIES = [
     suit: '♥',
     suitColor: 'var(--crimson)',
     tag: 'POKER ROOM',
-    winRate: 63,
-    exposure: 9800,
-    openPositions: 4,
     pill: 'SELECTIVE',
     pillColor: 'rgba(245,240,232,.5)',
     pillBorder: 'rgba(245,240,232,.2)',
     glow: 'rgba(245,240,232,.04)',
-    markets: ['UN resolution on AI treaty','G7 summit joint communiqué','Global temp record broken'],
   },
   {
     id: 'sports',
@@ -74,14 +58,10 @@ const CATEGORIES = [
     suit: '♠',
     suitColor: 'var(--ivory)',
     tag: 'DICE TABLE',
-    winRate: 59,
-    exposure: 6600,
-    openPositions: 3,
     pill: 'LOW WEIGHT',
     pillColor: 'rgba(245,240,232,.4)',
     pillBorder: 'rgba(245,240,232,.15)',
     glow: 'rgba(245,240,232,.03)',
-    markets: ['NBA Finals Game 7','Super Bowl LX winner','UFC 310 main event'],
   },
   {
     id: 'science',
@@ -90,40 +70,23 @@ const CATEGORIES = [
     suit: '★',
     suitColor: 'var(--neon-g)',
     tag: 'HIGH ROLLER SUITE',
-    winRate: 77,
-    exposure: 14300,
-    openPositions: 6,
     pill: 'ALPHA EDGE',
     pillColor: 'var(--neon-g)',
     pillBorder: 'rgba(0,255,136,.35)',
     glow: 'rgba(0,255,136,.07)',
-    markets: ['GPT-5 released before July','Nuclear fusion net gain Q1','Mars mission launch confirmed'],
   },
 ]
 
-const INIT_POSITIONS = [
-  { id: 1, market: 'Fed rate cut — May FOMC meeting', cat: 'FINANCE', dir: 'YES', entry: 0.62, current: 0.71, size: 4200, status: 'OPEN' },
-  { id: 2, market: 'BTC above $95k by April 30', cat: 'CRYPTO', dir: 'YES', entry: 0.48, current: 0.54, size: 8100, status: 'OPEN' },
-  { id: 3, market: 'US Senate seat flips — GA special', cat: 'POLITICS', dir: 'NO', entry: 0.38, current: 0.31, size: 3600, status: 'OPEN' },
-  { id: 4, market: 'GPT-5 released before July 2025', cat: 'SCIENCE', dir: 'YES', entry: 0.55, current: 0.68, size: 5500, status: 'RESOLVING' },
-  { id: 5, market: 'ETH/BTC ratio above 0.06 by Q2', cat: 'CRYPTO', dir: 'YES', entry: 0.41, current: 0.39, size: 6200, status: 'OPEN' },
-  { id: 6, market: 'CPI below 3% by June 2025', cat: 'FINANCE', dir: 'YES', entry: 0.57, current: 0.63, size: 2900, status: 'OPEN' },
-]
+const INIT_POSITIONS = []
 
-const BURN_INIT = [
-  { id: 1, amount: 4820, reason: 'US election market closed — profit incinerated', time: '2s ago' },
-  { id: 2, amount: 1240, reason: 'Buyback from treasury — tokens destroyed', time: '4m ago' },
-  { id: 3, amount: 3310, reason: 'GPT-5 position partial close — burned', time: '9m ago' },
-  { id: 4, amount: 890,  reason: 'Scheduled buyback — permanent removal', time: '14m ago' },
-  { id: 5, amount: 2100, reason: 'Fed resolution — profit incinerated', time: '22m ago' },
-]
+const BURN_INIT = []
 
 export default function App() {
   const [selected, setSelected] = useState(null)
   const [positions, setPositions] = useState(INIT_POSITIONS)
   const [burns, setBurns] = useState(BURN_INIT)
-  const [totalBurned, setTotalBurned] = useState(847392)
-  const [agentPnl, setAgentPnl] = useState(+2847)
+  const [totalBurned, setTotalBurned] = useState(0)
+  const [agentPnl, setAgentPnl] = useState(0)
   const [tick, setTick] = useState(0)
   const [treasurySOL, setTreasurySOL] = useState(null)
   const [agentOnline, setAgentOnline] = useState(false)
@@ -199,43 +162,14 @@ export default function App() {
     return () => clearInterval(iv)
   }, [])
 
-  // Simulate live P&L drift
+  // tick for minor UI updates
   useEffect(() => {
-    const iv = setInterval(() => {
-      setPositions(prev => prev.map(p => {
-        const drift = (Math.random() - 0.48) * 0.012
-        const next = Math.min(0.99, Math.max(0.01, p.current + drift))
-        return { ...p, current: parseFloat(next.toFixed(3)) }
-      }))
-      setAgentPnl(prev => prev + Math.floor((Math.random() - 0.3) * 120))
-      setTick(t => t + 1)
-    }, 2800)
-    return () => clearInterval(iv)
-  }, [])
-
-  // Simulate burns
-  useEffect(() => {
-    const burnReasons = [
-      'Market profit incinerated on-chain',
-      'Buyback executed — tokens destroyed',
-      'Resolved position — burn triggered',
-      'Treasury sweep — permanent removal',
-    ]
-    const iv = setInterval(() => {
-      const amt = Math.floor(Math.random() * 6000) + 400
-      setTotalBurned(prev => prev + amt)
-      setBurns(prev => [
-        { id: Date.now(), amount: amt, reason: burnReasons[Math.floor(Math.random()*burnReasons.length)], time: 'just now' },
-        ...prev.slice(0, 7)
-      ])
-    }, 6000)
+    const iv = setInterval(() => setTick(t => t + 1), 5000)
     return () => clearInterval(iv)
   }, [])
 
   const activeCategory = selected ? CATEGORIES.find(c => c.id === selected) : null
-  const totalExposure = CATEGORIES.reduce((s, c) => s + c.exposure, 0)
-  const totalOpen = CATEGORIES.reduce((s, c) => s + c.openPositions, 0)
-  const avgWin = Math.round(CATEGORIES.reduce((s, c) => s + c.winRate, 0) / CATEGORIES.length)
+  const totalOpen = positions.length
 
   return (
     <>
@@ -268,13 +202,13 @@ export default function App() {
           </div>
           <div className="agent-bar-stats">
             <div className="astat">
-              <div className="astat-val" style={{color:'var(--neon-g)'}}>{agentPnl >= 0 ? '+' : ''}${agentPnl.toLocaleString()}</div>
-              <div className="astat-label">Today&apos;s P&amp;L</div>
+              <div className="astat-val" style={{color:'var(--neon-g)'}}>{totalOpen}</div>
+              <div className="astat-label">Open Positions</div>
             </div>
             <div className="astat-sep" />
             <div className="astat">
               <div className="astat-val" style={{color:'var(--gold)'}}>
-                {treasurySOL != null ? `${treasurySOL.toFixed(3)} SOL` : `$${totalExposure.toLocaleString()}`}
+                {treasurySOL != null ? `${treasurySOL.toFixed(3)} SOL` : '--'}
               </div>
               <div className="astat-label">Treasury</div>
             </div>
@@ -285,8 +219,8 @@ export default function App() {
             </div>
             <div className="astat-sep" />
             <div className="astat">
-              <div className="astat-val">{avgWin}%</div>
-              <div className="astat-label">Win Rate</div>
+              <div className="astat-val">{agentOnline ? `${agentPnl >= 0 ? '+' : ''}${agentPnl}` : '--'}</div>
+              <div className="astat-label">Today&apos;s P&amp;L</div>
             </div>
           </div>
         </div>
@@ -338,8 +272,8 @@ export default function App() {
                 <div className="sm-reel-label">Amount</div>
                 <div className="sm-reel">
                   <div className="sm-strip reel-c">
-                    {['$8,100','$4,200','$3,600','$5,500','$2,900','$6,200',
-                      '$8,100','$4,200','$3,600','$5,500','$2,900','$6,200'].map((v,i) => (
+                    {['$1.00','$2.00','$3.00','$1.00','$2.00','$3.00',
+                      '$1.00','$2.00','$3.00','$1.00','$2.00','$3.00'].map((v,i) => (
                       <div key={i} className="sm-item" style={{color:'var(--neon-g)'}}>{v}</div>
                     ))}
                   </div>
@@ -370,17 +304,15 @@ export default function App() {
 
                 <div className="cat-stats">
                   <div className="cat-stat">
-                    <div className="cat-stat-val" style={{color:'var(--neon-g)'}}>{cat.winRate}%</div>
+                    <div className="cat-stat-val" style={{color:'var(--neon-g)'}}>--</div>
                     <div className="cat-stat-lbl">Win Rate</div>
                   </div>
                   <div className="cat-stat">
-                    <div className="cat-stat-val" style={{color:'var(--gold)'}}>
-                      ${(cat.exposure/1000).toFixed(1)}k
-                    </div>
+                    <div className="cat-stat-val" style={{color:'var(--gold)'}}>--</div>
                     <div className="cat-stat-lbl">Exposure</div>
                   </div>
                   <div className="cat-stat">
-                    <div className="cat-stat-val">{cat.openPositions}</div>
+                    <div className="cat-stat-val">--</div>
                     <div className="cat-stat-lbl">Open</div>
                   </div>
                 </div>
@@ -407,25 +339,17 @@ export default function App() {
             <div className="cat-detail-body">
               <div className="cat-detail-markets">
                 <div className="detail-label">Agent&apos;s Active Markets</div>
-                {activeCategory.markets.map((m, i) => (
-                  <div key={i} className="detail-market-row">
-                    <span className="detail-market-num">0{i+1}</span>
-                    <span className="detail-market-name">{m}</span>
-                    <span className="detail-market-status">
-                      <span className="live-dot" style={{width:6,height:6}} /> OPEN
-                    </span>
-                  </div>
-                ))}
+                <div className="detail-market-row" style={{opacity:0.4,fontStyle:'italic'}}>
+                  <span className="detail-market-name">Live positions will appear here once the agent is running.</span>
+                </div>
               </div>
               <div className="cat-detail-aside">
                 <div className="detail-big-stat">
-                  <div className="detail-big-val" style={{color:'var(--neon-g)'}}>{activeCategory.winRate}%</div>
+                  <div className="detail-big-val" style={{color:'var(--neon-g)'}}>--</div>
                   <div className="detail-big-lbl">Category Win Rate</div>
                 </div>
                 <div className="detail-big-stat">
-                  <div className="detail-big-val" style={{color:'var(--gold)'}}>
-                    ${activeCategory.exposure.toLocaleString()}
-                  </div>
+                  <div className="detail-big-val" style={{color:'var(--gold)'}}>--</div>
                   <div className="detail-big-lbl">Total Exposure</div>
                 </div>
                 <div className="detail-note">
@@ -444,8 +368,6 @@ export default function App() {
               <h3 className="roulette-title">WHERE THE<br /><span className="accent">CLAW</span> PLAYS</h3>
               <div className="roulette-legend">
                 {CATEGORIES.map(cat => {
-                  const total = CATEGORIES.reduce((s,c) => s + c.exposure, 0)
-                  const pct = Math.round(cat.exposure / total * 100)
                   const dotColor = cat.suitColor === 'var(--ivory)'
                     ? 'rgba(245,240,232,.6)'
                     : cat.suitColor === 'var(--crimson)' ? '#C8102E'
@@ -456,7 +378,7 @@ export default function App() {
                     <div key={cat.id} className="legend-row">
                       <div className="legend-dot" style={{background: dotColor}} />
                       <span className="legend-name">{cat.label}</span>
-                      <span className="legend-pct">{pct}%</span>
+                      <span className="legend-pct">--</span>
                     </div>
                   )
                 })}
@@ -577,12 +499,11 @@ export default function App() {
 
       <footer>
         <div className="footer-logo">POLY<span>CLAW</span></div>
-        <div className="footer-copy">© 2025 POLYCLAW · Autonomous · Deflationary · Relentless<br />Not financial advice. The house always burns.</div>
+        <div className="footer-copy">© 2026 POLYCLAW · Autonomous · Deflationary · Relentless<br />Not financial advice. The house always burns.</div>
         <div className="footer-links">
-          <a href="#">Twitter</a>
-          <a href="#">Telegram</a>
-          <a href="#">Docs</a>
-          <a href="#">Audit</a>
+          <a href="https://x.com/PolyClawSolana" target="_blank" rel="noopener noreferrer">Twitter</a>
+          <a href="/docs">Docs</a>
+          <a href="https://github.com/PolyClaws/Repo" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
       </footer>
 

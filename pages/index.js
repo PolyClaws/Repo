@@ -467,16 +467,20 @@ export default function Home() {
           <button className="btn-casino" onClick={enterHouse}>ENTER THE HOUSE</button>
           <button className="btn-ghost"  onClick={openRules}>VIEW CONTRACT</button>
         </div>
+        <div className="ca-bar">
+          <span className="ca-label">CA</span>
+          {/* REPLACE ca-val content with mint address after launch */}
+          <span className="ca-val">TBA AT LAUNCH</span>
+        </div>
       </section>
 
       <footer>
         <div className="footer-logo">POLY<span>CLAW</span></div>
-        <div className="footer-copy">© 2025 POLYCLAW · Autonomous · Deflationary · Relentless<br />Not financial advice. The house always burns.</div>
+        <div className="footer-copy">© 2026 POLYCLAW · Autonomous · Deflationary · Relentless<br />Not financial advice. The house always burns.</div>
         <div className="footer-links">
-          <a href="#">Twitter</a>
-          <a href="#">Telegram</a>
+          <a href="https://x.com/PolyClawSolana" target="_blank" rel="noopener noreferrer">Twitter</a>
           <a href="/docs">Docs</a>
-          <a href="#">Audit</a>
+          <a href="https://github.com/PolyClaws/Repo" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
       </footer>
 
